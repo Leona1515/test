@@ -104,6 +104,62 @@ void Init(){
 	DrawSnack();
 	InitFood();
 }
+
+void UpdateScreen()
+{
+
+DrawSnack();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+}
+void SnackMove(int key)
+{
+	int delta_x=0;
+	int delta_y=0;
+	if(key == 'w'|| key == 'W')//w向上
+	{
+		delta_x =0;
+		delta_y =-1;
+	}
+	else if(key == 's'|| key == 'S')//S向下
+	{
+		delta_x =0;
+		delta_y =1;
+	}
+	else if(key == 'a'|| key == 'A')//A向左
+	{
+		delta_x =-1;
+		delta_y =0;
+	}
+	else if(key == 'd'|| key == 'D')//D向右
+	{
+		delta_x =1;
+		delta_y =0;
+	}
+	else{
+		return;
+	}
+	DrawChar(g_snack.pos [g_snack.size -1].x,g_snack.pos [g_snack.size -1].y,' ');
+	//后一个节点作为前一个节点的坐标
+	for(int i=g_snack.size-1;i>0;i--)
+	{
+		g_snack.pos[i].x=g_snack.pos[i-1].x;
+		g_snack.pos[i].y=g_snack.pos[i-1].y;
+	}
+	g_snack.pos[0].x += delta_x;
+	g_snack.pos[0].y += delta_y;
+}
+//头结点与食物的坐标相同
+void EatFood()
+{
+    if(g_snack.pos[0].x == g_food.x && 	g_snack.pos[0].y == g_food.y)
+	{
+		g_snack.size++;
+		g_snack.pos[g_snack.size -1].x =g_food.x ;
+		g_snack.pos[g_snack.size -1].y =g_food.y ;
+		InitFood(); c                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+	}
+
+}
+
 void GameLoop(){
 	int key =0;
 while(1)
@@ -117,10 +173,13 @@ while(1)
 		if(key == 'q' || key == 'q'){
 			return;
 		}
+		//键盘移动贪吃蛇
+		SnackMove(key);
 		//处理撞墙等事件
+		EatFood();
 		//更新画面
 
-       // UpdateScreen();
+       UpdateScreen();
 
 		Sleep(100);//延时
 	}
